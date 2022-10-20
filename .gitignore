@@ -1,0 +1,4 @@
+.DS_Store
+CMakeUserPresets.json
+build
+test_package/build-release/
