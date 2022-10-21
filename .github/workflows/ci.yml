@@ -1,0 +1,52 @@
+on: [push, pull_request, workflow_dispatch]
+
+env:
+  CONAN_USER_HOME: /home/conan
+
+defaults:
+  run:
+    working-directory: /home/conan/library
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    container:
+      image: conanio/gcc11
+    env:
+      CONAN_USER_HOME: /home/conan
+      CONAN_SYSREQUIRES_MODE: enabled
+      CONAN_PRINT_RUN_COMMANDS: 1
+    steps:
+
+      - name: Check out repository code
+        uses: rodrigorodriguescosta/checkout@1d64c0a4a695ff5edb95596c11b430050668c83f  # FIXME: Not using actions/checkout just because of 'https://github.com/actions/checkout/pull/388'
+        with:
+          path: /home/conan/library
+
+      - name: Cache Conan packages
+        uses: actions/cache@v2
+        with:
+          key: conan-cache
+          path: /home/conan/.conan
+
+      - name: Configure Conan
+        run: |
+          conan config init --force
+          conan config set general.revisions_enabled=1
+          conan profile update settings.compiler.libcxx=libstdc++11 default
+          conan config install https://github.com/conan-io/conanclientcert.git
+          conan --version
+          conan config home
+      - name: Prepare deps
+        run: |
+          cp -r .conan/* /home/conan/.conan/
+          conan profile list
+      - name: Build the package and run test_package
+        run: |
+          conan create . -pr:b=default -pr:h=default --build=missing
+      - name: Build the project locally
+        run: |
+          mkdir build && cd build
+          conan install .. -s build_type=Release -pr:b=default -pr:h=default --build=missing
+          cmake .. -DCMAKE_TOOLCHAIN_FILE=generators/conan_toolchain
+          make
