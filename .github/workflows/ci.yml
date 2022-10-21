@@ -3,6 +3,10 @@ on: [push, pull_request, workflow_dispatch]
 env:
   CONAN_USER_HOME: /home/conan
 
+defaults:
+  run:
+    working-directory: /home/conan
+
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
@@ -35,9 +39,7 @@ jobs:
           conan config home
       - name: Build the package and run test_package
         run: |
-          cd /home/conan
-          pwd
-          ls
+          conan create . -pr:b=default -pr:h=default --build=missing
       - name: Build the project locally
         run: |
           mkdir build
