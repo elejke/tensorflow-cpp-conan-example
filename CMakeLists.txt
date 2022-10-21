@@ -23,9 +23,5 @@ foreach(asset ${ASSETS})
         add_custom_command(TARGET tflite-example POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_if_different
                 ${asset}
-                $<TARGET_FILE_DIR:tflite-example>
-
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                ${asset}
-                ${CMAKE_INSTALL_PREFIX}/bin)
+                $<TARGET_FILE_DIR:tflite-example>)
 endforeach(asset)
