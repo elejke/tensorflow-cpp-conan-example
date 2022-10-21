@@ -35,6 +35,7 @@ jobs:
           conan config home
       - name: Build the package and run test_package
         run: |
+          cd /home/conan
           pwd
           ls
       - name: Build the project locally
