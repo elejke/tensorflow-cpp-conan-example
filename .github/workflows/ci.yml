@@ -3,10 +3,6 @@ on: [push, pull_request, workflow_dispatch]
 env:
   CONAN_USER_HOME: /home/conan
 
-defaults:
-  run:
-    working-directory: /home/conan/library
-
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
@@ -19,15 +15,7 @@ jobs:
     steps:
 
       - name: Check out repository code
-        uses: rodrigorodriguescosta/checkout@1d64c0a4a695ff5edb95596c11b430050668c83f  # FIXME: Not using actions/checkout just because of 'https://github.com/actions/checkout/pull/388'
-        with:
-          path: /home/conan/library
-
-      - name: Cache Conan packages
-        uses: actions/cache@v2
-        with:
-          key: conan-cache
-          path: /home/conan/.conan
+        uses: actions/checkout@v2
 
       - name: Configure Conan
         run: |
@@ -37,10 +25,6 @@ jobs:
           conan config install https://github.com/conan-io/conanclientcert.git
           conan --version
           conan config home
-      - name: Prepare deps
-        run: |
-          cp -r .conan/* /home/conan/.conan/
-          conan profile list
       - name: Build the package and run test_package
         run: |
           conan create . -pr:b=default -pr:h=default --build=missing
