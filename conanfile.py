@@ -26,6 +26,7 @@ class tflite_exampleRecipe(ConanFile):
         self.requires("tensorflow-lite/2.10.0")
         self.requires("opencv/4.5.5")
         self.requires("eigen/3.4.0", override=True)
+        self.requires("cpuinfo/cci.20220228", override=True)
 
     def layout(self):
         cmake_layout(self)
