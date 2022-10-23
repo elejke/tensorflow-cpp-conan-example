@@ -37,16 +37,16 @@ jobs:
           conan config install https://github.com/conan-io/conanclientcert.git
           conan --version
           conan config home
-          conan remote add default-conan-local https://carloszoido.jfrog.io/artifactory/api/conan/default-conan-local
+          conan remote add default-conan-local https://carloszoido.jfrog.io/artifactory/api/conan/default-conan-local -i 0
           conan user ${{ secrets.RT_USERNAME }} -p=${{ secrets.RT_TOKEN }} -r=default-conan-local
       - name: Build the package and run test_package
         run: |
-          conan create . -pr:b=default -pr:h=default --build=missing -c tools.system.package_manager:mode=install -c tools.system.package_manager:sudo=True -r=default-conan-local
+          conan create . -pr:b=default -pr:h=default --build=missing -c tools.system.package_manager:mode=install -c tools.system.package_manager:sudo=True
       - name: Build the project locally
         run: |
           mkdir build
           cd build
-          conan install .. -s build_type=Release -pr:b=default -pr:h=default --build=missing -c tools.system.package_manager:mode=install -c tools.system.package_manager:sudo=True -r=default-conan-local
+          conan install .. -s build_type=Release -pr:b=default -pr:h=default --build=missing -c tools.system.package_manager:mode=install -c tools.system.package_manager:sudo=True
           cmake .. -DCMAKE_TOOLCHAIN_FILE=generators/conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release
           make
           ./tflite-example mobilenet_v1_1.0_224_quant.tflite labels_mobilenet_quant_v1_224.txt bird.png
