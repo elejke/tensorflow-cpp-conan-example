@@ -105,6 +105,11 @@ int main(int argc, char * argv[]) {
         std::cout << "------------------" << std::endl;
         std::cout << "detected:" + labels[index] <<  " with confidence: " << confidence << std::endl;
         std::cout << "------------------" << std::endl;
+        cv::putText(source_image, labels[index], cv::Point(10, source_image.rows/8), cv::FONT_HERSHEY_SIMPLEX, 0.75, CV_RGB(255, 0, 255), 2);
     }
+
+    imshow("Display window", source_image);
+    cv::waitKey(0);
+
     return 0;
 }
