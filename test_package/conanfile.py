@@ -20,5 +20,5 @@ class tflite_exampleTestConan(ConanFile):
         if can_run(self):
             model_path = os.path.join(self.source_folder, "../assets", "mobilenet_v1_1.0_224_quant.tflite")
             labels_path = os.path.join(self.source_folder, "../assets", "labels_mobilenet_quant_v1_224.txt")
-            image_path = os.path.join(self.source_folder, "../assets", "lion.png")
+            image_path = os.path.join(self.source_folder, "../assets", "frog.png")
             self.run(f"tflite-example {model_path} {labels_path} {image_path}", env="conanrun")
