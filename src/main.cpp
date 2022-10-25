@@ -32,14 +32,11 @@ std::vector<std::string> read_labels(std::string labels_file) {
 }
 
 int main(int argc, char * argv[]) {
-    if ( argc != 4) {
-        std::cerr << "Pass model, labels and image path as argument" << std::endl;
-        return -1;
-    }
+    std::string model_file = (argc<4) ? "mobilenet_v1_1.0_224_quant.tflite" : std::string(argv[1]);
+    std::string labels_file = (argc<4) ? "labels_mobilenet_quant_v1_224.txt" : std::string(argv[2]);
+    std::string image_file = (argc<4) ? "bird.png" : std::string(argv[3]);
 
-    auto model = tflite::FlatBufferModel::BuildFromFile(argv[1]);
-    auto labels_file = argv[2];
-    auto image_file = argv[3];
+    auto model = tflite::FlatBufferModel::BuildFromFile(model_file.c_str());
 
     if (!model) {
         throw std::runtime_error("Failed to load TFLite model");
@@ -105,7 +102,9 @@ int main(int argc, char * argv[]) {
     {
         const float confidence = result.first;
         const int index = result.second;
-        std::cout << "detected :" + labels[index] <<  " with confidence: " << confidence << std::endl;
+        std::cout << "------------------" << std::endl;
+        std::cout << "detected:" + labels[index] <<  " with confidence: " << confidence << std::endl;
+        std::cout << "------------------" << std::endl;
     }
     return 0;
 }
