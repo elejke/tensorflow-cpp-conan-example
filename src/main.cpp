@@ -35,6 +35,7 @@ int main(int argc, char * argv[]) {
     std::string model_file = (argc<4) ? "mobilenet_v1_1.0_224_quant.tflite" : std::string(argv[1]);
     std::string labels_file = (argc<4) ? "labels_mobilenet_quant_v1_224.txt" : std::string(argv[2]);
     std::string image_file = (argc<4) ? "frog.png" : std::string(argv[3]);
+    bool show_image = (argc==5 && std::string(argv[4])=="0") ? false : true;
 
     auto model = tflite::FlatBufferModel::BuildFromFile(model_file.c_str());
 
@@ -107,9 +108,11 @@ int main(int argc, char * argv[]) {
         std::cout << "------------------" << std::endl;
         cv::putText(source_image, labels[index], cv::Point(10, source_image.rows/8), cv::FONT_HERSHEY_SIMPLEX, 0.95, CV_RGB(255, 0, 255), 2);
     }
-
-    imshow("Display window", source_image);
-    cv::waitKey(0);
+    
+    if (show_image) {
+        imshow("Display window", source_image);
+        cv::waitKey(0);
+    }
 
     return 0;
 }
