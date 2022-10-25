@@ -34,7 +34,7 @@ std::vector<std::string> read_labels(std::string labels_file) {
 int main(int argc, char * argv[]) {
     std::string model_file = (argc<4) ? "mobilenet_v1_1.0_224_quant.tflite" : std::string(argv[1]);
     std::string labels_file = (argc<4) ? "labels_mobilenet_quant_v1_224.txt" : std::string(argv[2]);
-    std::string image_file = (argc<4) ? "bird.png" : std::string(argv[3]);
+    std::string image_file = (argc<4) ? "lion.png" : std::string(argv[3]);
 
     auto model = tflite::FlatBufferModel::BuildFromFile(model_file.c_str());
 
@@ -105,7 +105,7 @@ int main(int argc, char * argv[]) {
         std::cout << "------------------" << std::endl;
         std::cout << "detected:" + labels[index] <<  " with confidence: " << confidence << std::endl;
         std::cout << "------------------" << std::endl;
-        cv::putText(source_image, labels[index], cv::Point(10, source_image.rows/8), cv::FONT_HERSHEY_SIMPLEX, 0.75, CV_RGB(255, 0, 255), 2);
+        cv::putText(source_image, labels[index], cv::Point(10, source_image.rows/8), cv::FONT_HERSHEY_SIMPLEX, 0.95, CV_RGB(255, 0, 255), 2);
     }
 
     imshow("Display window", source_image);
